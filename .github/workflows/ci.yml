@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.1
+        with:
+          version: 7.27.0
+
+      - name: Install
+        run: pnpm install
+
+      - name: Lint
+        run: pnpm lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.1
+        with:
+          version: 7.27.0
+
+      - name: Install
+        run: pnpm install
+
+      - name: Test
+        run: pnpm test

@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "esnext",
+    "lib": ["esnext"],
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "resolveJsonModule": true,
+    "types": [
+      "node"
+    ]
+  },
+  "exclude": [
+    "**/dist/**",
+    "**/node_modules/**",
+    "**/test/dts/**"
+  ]
+}
