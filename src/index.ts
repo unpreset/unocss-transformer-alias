@@ -1,5 +1,5 @@
-import type { SourceCodeTransformer, UnoGenerator } from '@unocss/core'
 import { isStaticShortcut } from '@unocss/core'
+import type { SourceCodeTransformer, UnoGenerator } from '@unocss/core'
 import type MagicString from 'magic-string'
 
 export interface TransformerAliasOptions {
