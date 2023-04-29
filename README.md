@@ -1,16 +1,16 @@
-# transformer-alias [![npm](https://img.shields.io/npm/v/transformer-alias.svg)](https://npmjs.com/package/transformer-alias)
+# unocss-transformer-alias [![npm](https://img.shields.io/npm/v/unocss-transformer-alias.svg)](https://npmjs.com/package/unocss-transformer-alias)
 
 Transform alias for UnoCSS shortcuts.
 
 ## Install
 ```shell
-pnpm i -D transformer-alias
+pnpm i -D unocss-transformer-alias
 ```
 
 ```ts
 // uno.config.ts
 import { defineConfig } from 'unocss'
-import { transformerAlias } from 'transformer-alias'
+import { transformerAlias } from 'unocss-transformer-alias'
 
 export default defineConfig({
   // ...

@@ -1,17 +1,17 @@
 {
-  "name": "transformer-alias",
+  "name": "unocss-transformer-alias",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "Transform alias for UnoCSS shortcuts",
   "author": "Chris <https://github.com/zyyv>",
   "license": "MIT",
-  "homepage": "https://github.com/zyyv/transformer-alias#readme",
+  "homepage": "https://github.com/zyyv/unocss-transformer-alias#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zyyv/transformer-alias.git"
+    "url": "git+https://github.com/zyyv/unocss-transformer-alias.git"
   },
   "bugs": {
-    "url": "https://github.com/zyyv/transformer-alias/issues"
+    "url": "https://github.com/zyyv/unocss-transformer-alias/issues"
   },
   "keywords": [
     "UnoCSS",

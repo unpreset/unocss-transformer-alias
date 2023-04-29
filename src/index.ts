@@ -13,7 +13,7 @@ export interface TransformerAliasOptions {
 
 export function transformerAlias(options: TransformerAliasOptions = {}): SourceCodeTransformer {
   return {
-    name: '@unocss/transformer-alias',
+    name: 'unocss-transformer-alias',
     enforce: 'pre',
     transform(code, _, { uno }) {
       transformAlias(code, uno, options)
