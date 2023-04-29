@@ -1,12 +1,12 @@
 import type { UnoGenerator } from '@unocss/core'
-import { createGenerator } from '@unocss/core'
+import { createGenerator, expandVariantGroup } from '@unocss/core'
 import { describe, expect, test } from 'vitest'
 import MagicString from 'magic-string'
 import { transformAlias } from '../src'
 
 const uno = createGenerator({
   shortcuts: [
-    ['btn', 'px-2 py-3 bg-blue-500 text-white rounded'],
+    ['btn', 'px-2 py-3 bg-blue-500 text-(white xl) rounded'],
     [/^btn-(.*)$/, ([, c]) => `bg-${c}4:10 text-${c}5 rounded`],
     [/^text-(.*)$/, ([, c]) => `bg-${c}4:10 text-${c}5 rounded`],
   ],
@@ -37,7 +37,7 @@ describe('transformer alias', () => {
 
     expect(transform(code)).toMatchInlineSnapshot(`
       "<template>
-        <div px-2 py-3 bg-blue-500 text-white rounded>
+        <div px-2 py-3 bg-blue-500 text-white text-xl rounded>
           <div text-xl class=\\"bg-red4:10 text-red5 rounded\\" />
           <div bg-red4:10 text-red5 rounded />
         </div>
@@ -59,11 +59,13 @@ describe('transformer alias', () => {
 
     expect(transform(code)).toMatchInlineSnapshot(`
       "<template>
-        <div px-2 py-3 bg-blue-500 text-white rounded>
+        <div px-2 py-3 bg-blue-500 text-white text-xl rounded>
           <div text-xl class=\\"bg-red4:10 text-red5 rounded\\" />
           <div *btn-red />
         </div>
       </template>"
     `)
+
+    expect(expandVariantGroup('bg-blue-500 text-(white xl) rounded')).toMatchInlineSnapshot('"bg-blue-500 text-white text-xl rounded"')
   })
 })
