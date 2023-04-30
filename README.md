@@ -10,7 +10,7 @@ pnpm i -D unocss-transformer-alias
 ```ts
 // uno.config.ts
 import { defineConfig } from 'unocss'
-import { transformerAlias } from 'unocss-transformer-alias'
+import transformerAlias from 'unocss-transformer-alias'
 
 export default defineConfig({
   // ...
