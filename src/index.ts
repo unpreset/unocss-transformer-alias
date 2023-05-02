@@ -28,13 +28,26 @@ export async function transformAlias(
 ) {
   const prefix = options.prefix ?? '*'
   const extraRE = new RegExp(`${escapeRegExp(prefix)}([\\w-]+)`, 'g')
+  const map = new Map<string, ShortcutValue | false>()
 
   for (const item of Array.from(code.original.matchAll(extraRE))) {
-    const result = await expandShortcut(item[1], uno)
-    if (!result)
+    let result = map.get(item[0])
+    if (result === false) {
       continue
+    }
+    else if (!result) {
+      const r = await expandShortcut(item[1], uno)
+      if (r) {
+        result = r[0].join(' ')
+        map.set(item[0], result)
+      }
+      else {
+        map.set(item[0], false)
+        continue
+      }
+    }
 
-    code.overwrite(item.index!, item.index! + item[0].length, result[0].join(' '))
+    code.overwrite(item.index!, item.index! + item[0].length, result as string)
   }
 }
 
