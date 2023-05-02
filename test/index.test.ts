@@ -1,14 +1,13 @@
 import type { UnoGenerator } from '@unocss/core'
-import { createGenerator, expandVariantGroup } from '@unocss/core'
+import { createGenerator } from '@unocss/core'
 import { describe, expect, test } from 'vitest'
 import MagicString from 'magic-string'
 import { expandShortcut, transformAlias } from '../src'
 
 const uno = createGenerator({
   shortcuts: [
-    ['btn', 'px-2 py-3 bg-blue-500 text-(white xl) rounded'],
-    [/^btn-(.*)$/, ([, c]) => `btn bg-${c}4:10 text-${c}5`],
-    [/^primary-(.*)$/, ([, c]) => `border-${c} btn-${c} flex items-center`],
+    ['btn', 'text-(white xl) font-bold py-2 px-4 rounded cursor-pointer'],
+    [/^btn-(.+)$/, ([,d]) => `bg-${d}-500 hover:bg-${d}-700 btn`],
   ],
 })
 
@@ -30,7 +29,7 @@ describe('transformer alias', () => {
 <template>
   <div *btn>
     <div text-xl class="*btn-red" />
-    <div *btn-red />
+    <div *btn-teal />
   </div>
 </template>
     `.trim()
@@ -39,7 +38,7 @@ describe('transformer alias', () => {
       "<template>
         <div *btn>
           <div text-xl class=\\"*btn-red\\" />
-          <div *btn-red />
+          <div *btn-teal />
         </div>
       </template>"
     `)
@@ -50,8 +49,8 @@ describe('transformer alias', () => {
 
     const code = `
 <template>
-  <div &test>
-    <div text-xl class="&primary-red" />
+  <div &test-none>
+    <div text-xl class="&btn-red" />
     <div *btn-red />
   </div>
 </template>
@@ -59,8 +58,8 @@ describe('transformer alias', () => {
 
     expect(transform(code)).toMatchInlineSnapshot(`
       "<template>
-        <div &test>
-          <div text-xl class=\\"&primary-red\\" />
+        <div &test-none>
+          <div text-xl class=\\"&btn-red\\" />
           <div *btn-red />
         </div>
       </template>"
@@ -83,23 +82,19 @@ describe('transformer alias', () => {
           </template>"
     `)
 
-    expect(expandVariantGroup('text-(white xl) rounded')).toBe('text-white text-xl rounded')
-
-    expect(await expandShortcut('primary-red', uno))
+    expect(await expandShortcut('btn-red', uno))
       .toMatchInlineSnapshot(`
         [
           [
-            "border-red",
-            "px-2",
-            "py-3",
-            "bg-blue-500",
+            "bg-red-500",
+            "hover:bg-red-700",
             "text-white",
             "text-xl",
+            "font-bold",
+            "py-2",
+            "px-4",
             "rounded",
-            "bg-red4:10",
-            "text-red5",
-            "flex",
-            "items-center",
+            "cursor-pointer",
           ],
         ]
       `)

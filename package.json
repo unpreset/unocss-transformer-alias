@@ -47,7 +47,8 @@
     "lint": "eslint .",
     "test": "vitest",
     "test:update": "vitest -u",
-    "typecheck": "tcs --noEmit"
+    "typecheck": "tcs --noEmit",
+    "play": "npm -C playground run dev"
   },
   "dependencies": {
     "@unocss/core": "^0.51.8"
