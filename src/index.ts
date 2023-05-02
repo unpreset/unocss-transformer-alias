@@ -15,8 +15,8 @@ export default function transformerAlias(options: TransformerAliasOptions = {}):
   return {
     name: 'unocss-transformer-alias',
     enforce: 'pre',
-    transform(code, _, { uno }) {
-      transformAlias(code, uno, options)
+    async transform(code, _, { uno }) {
+      await transformAlias(code, uno, options)
     },
   }
 }
