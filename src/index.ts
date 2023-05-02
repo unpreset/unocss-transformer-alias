@@ -21,25 +21,16 @@ export default function transformerAlias(options: TransformerAliasOptions = {}):
   }
 }
 
-export function transformAlias(code: MagicString, uno: UnoGenerator, options: TransformerAliasOptions = {}) {
+export async function transformAlias(code: MagicString, uno: UnoGenerator, options: TransformerAliasOptions = {}) {
   const prefix = options.prefix ?? '*'
   const extraRE = new RegExp(`${escapeRegExp(prefix)}([\\w-]+)`, 'g')
 
   for (const item of Array.from(code.original.matchAll(extraRE))) {
-    for (const shortcut of uno.config.shortcuts) {
-      let result
-      if (isStaticShortcut(shortcut)) {
-        if (shortcut[0] === item[1])
-          result = shortcut[1]
-      }
-      else {
-        const match = item[1].match(shortcut[0])
-        if (match != null)
-          result = shortcut[1](match, uno.config as any)
-      }
-      if (isString(result))
-        code.overwrite(item.index!, item.index! + item[0].length, expandVariantGroup(result.trim()))
-    }
+    const result = await expandShortcut(item[1], uno)
+    if (!result)
+      continue
+
+    code.overwrite(item.index!, item.index! + item[0].length, result[0].join(' '))
   }
 }
 
@@ -47,13 +38,9 @@ export async function expandShortcut(
   input: string,
   uno: UnoGenerator,
   depth = 5,
-  map = new Map<string, string>(),
-) {
+): Promise<any> {
   if (depth <= 0)
     return
-
-  if (map.get(input))
-    return map.get(input)
 
   let result: string | ShortcutValue[] | undefined
 
@@ -79,9 +66,7 @@ export async function expandShortcut(
     (await Promise.all(
       result
         .filter(s => s !== input)
-        .map(async r => (isString(r)
-          ? (await expandShortcut(r, shortcuts, depth - 1))?.[0]
-          : undefined) || [r]),
+        .map(async r => (isString(r) ? (await expandShortcut(r, uno, depth - 1))?.[0] : undefined) || [r]),
     )).flat(1).filter(Boolean),
   ]
 }
