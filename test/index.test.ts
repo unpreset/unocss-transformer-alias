@@ -12,9 +12,9 @@ const uno = createGenerator({
 })
 
 function createTransformer(prefix = '*') {
-  return (code: string, _uno: UnoGenerator = uno) => {
+  return async (code: string, _uno: UnoGenerator = uno) => {
     const s = new MagicString(code)
-    transformAlias(s, _uno, {
+    await transformAlias(s, _uno, {
       prefix,
     })
     return s.toString()
@@ -34,11 +34,11 @@ describe('transformer alias', () => {
 </template>
     `.trim()
 
-    expect(transform(code)).toMatchInlineSnapshot(`
+    expect(await transform(code)).toMatchInlineSnapshot(`
       "<template>
-        <div *btn>
-          <div text-xl class=\\"*btn-red\\" />
-          <div *btn-teal />
+        <div text-white text-xl font-bold py-2 px-4 rounded cursor-pointer>
+          <div text-xl class=\\"bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer\\" />
+          <div bg-teal-500 hover:bg-teal-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer />
         </div>
       </template>"
     `)
@@ -56,10 +56,10 @@ describe('transformer alias', () => {
 </template>
     `.trim()
 
-    expect(transform(code)).toMatchInlineSnapshot(`
+    expect(await transform(code)).toMatchInlineSnapshot(`
       "<template>
         <div &test-none>
-          <div text-xl class=\\"&btn-red\\" />
+          <div text-xl class=\\"bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer\\" />
           <div *btn-red />
         </div>
       </template>"
@@ -75,10 +75,10 @@ describe('transformer alias', () => {
         `.trim()
     const transform = createTransformer()
 
-    expect(transform(code)).toMatchInlineSnapshot(`
+    expect(await transform(code)).toMatchInlineSnapshot(`
       "<template>
-              <div class=\\"*btn-red\\" />
-              <div *btn-red />
+              <div class=\\"bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer\\" />
+              <div bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer />
           </template>"
     `)
 
