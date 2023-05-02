@@ -21,7 +21,11 @@ export default function transformerAlias(options: TransformerAliasOptions = {}):
   }
 }
 
-export async function transformAlias(code: MagicString, uno: UnoGenerator, options: TransformerAliasOptions = {}) {
+export async function transformAlias(
+  code: MagicString,
+  uno: UnoGenerator,
+  options: TransformerAliasOptions = {},
+) {
   const prefix = options.prefix ?? '*'
   const extraRE = new RegExp(`${escapeRegExp(prefix)}([\\w-]+)`, 'g')
 
@@ -38,7 +42,7 @@ export async function expandShortcut(
   input: string,
   uno: UnoGenerator,
   depth = 5,
-): Promise<any> {
+): Promise<[ShortcutValue[]] | undefined> {
   if (depth <= 0)
     return
 

@@ -8,7 +8,7 @@ const uno = createGenerator({
   shortcuts: [
     ['btn', 'px-2 py-3 bg-blue-500 text-(white xl) rounded'],
     [/^btn-(.*)$/, ([, c]) => `btn bg-${c}4:10 text-${c}5`],
-    [/^primary-(.*)$/, ([, c]) => `bg-${c}4:10 text-${c}5`],
+    [/^primary-(.*)$/, ([, c]) => `border-${c} btn-${c} flex items-center`],
   ],
 })
 
@@ -85,10 +85,11 @@ describe('transformer alias', () => {
 
     expect(expandVariantGroup('text-(white xl) rounded')).toBe('text-white text-xl rounded')
 
-    expect(await expandShortcut('btn-red', uno))
+    expect(await expandShortcut('primary-red', uno))
       .toMatchInlineSnapshot(`
         [
           [
+            "border-red",
             "px-2",
             "py-3",
             "bg-blue-500",
@@ -97,6 +98,8 @@ describe('transformer alias', () => {
             "rounded",
             "bg-red4:10",
             "text-red5",
+            "flex",
+            "items-center",
           ],
         ]
       `)
