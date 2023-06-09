@@ -2,7 +2,7 @@ import type { UnoGenerator } from '@unocss/core'
 import { createGenerator } from '@unocss/core'
 import { describe, expect, test } from 'vitest'
 import MagicString from 'magic-string'
-import { expandShortcut, transformAlias } from '../src'
+import { type KeepOption, expandShortcut, transformAlias } from '../src'
 
 const uno = createGenerator({
   shortcuts: [
@@ -11,7 +11,7 @@ const uno = createGenerator({
   ],
 })
 
-function createTransformer(prefix = '*', keep = '+') {
+function createTransformer(prefix = '*', keep: string | KeepOption = '+') {
   return async (code: string, _uno: UnoGenerator = uno) => {
     const s = new MagicString(code)
     await transformAlias(s, _uno, {
@@ -101,20 +101,26 @@ describe('transformer alias', () => {
       `)
   })
 
-  test('keep shortcut', async () => {
-    const code = `
-    <template>
-        <div class="+btn" />
-        <div *btn-red />
-    </template>
-        `.trim()
+  test('keep shortcut with prefix', async () => {
+    const code = '<div class="+btn" />'
     const transform = createTransformer('*', '+')
+    const result = await transform(code)
 
-    expect(await transform(code)).toMatchInlineSnapshot(`
-      "<template>
-              <div class=\\"btn text-white text-xl font-bold py-2 px-4 rounded cursor-pointer\\" />
-              <div bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer />
-          </template>"
-    `)
+    expect(result).toMatchInlineSnapshot('"<div class=\\"btn text-white text-xl font-bold py-2 px-4 rounded cursor-pointer\\" />"')
+    expect(uno.config.blocklist).toContain('btn')
+  })
+
+  test('keep shortcut with block false', async () => {
+    const _uno = createGenerator({
+      shortcuts: [
+        ['btn', 'text-(white xl) font-bold py-2 px-4 rounded cursor-pointer'],
+      ],
+    })
+    const code = '<div class="+btn" />'
+    const transform = createTransformer('*', { prefix: '+', block: false })
+    const result = await transform(code)
+
+    expect(result).toMatchInlineSnapshot('"<div class=\\"btn text-white text-xl font-bold py-2 px-4 rounded cursor-pointer\\" />"')
+    expect(_uno.config.blocklist).toEqual([])
   })
 })

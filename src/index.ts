@@ -2,6 +2,8 @@ import { expandVariantGroup, isStaticShortcut, isString } from '@unocss/core'
 import type { ShortcutValue, SourceCodeTransformer, UnoGenerator } from '@unocss/core'
 import type MagicString from 'magic-string'
 
+export interface KeepOption { prefix: string; block: boolean }
+
 export interface TransformerAliasOptions {
   /**
    * Prefix for your alias.
@@ -14,7 +16,7 @@ export interface TransformerAliasOptions {
    *
    * @default '+'
    */
-  keep?: string
+  keep?: string | KeepOption
 }
 
 export default function transformerAlias(options?: TransformerAliasOptions): SourceCodeTransformer {
@@ -35,7 +37,10 @@ export async function transformAlias(
     keep = '+',
   }: TransformerAliasOptions = {},
 ) {
-  const extraRE = new RegExp(`(${escapeRegExp(prefix)}|${escapeRegExp(keep)})([\\w-]+)`, 'g')
+  if (typeof keep === 'string')
+    keep = { prefix: keep, block: true }
+
+  const extraRE = new RegExp(`(${escapeRegExp(prefix)}|${escapeRegExp(keep.prefix)})([\\w-]+)`, 'g')
   const map = new Map<string, ShortcutValue | false>()
 
   for (const item of Array.from(code.original.matchAll(extraRE))) {
@@ -55,8 +60,11 @@ export async function transformAlias(
       }
     }
 
-    if (item[1] === keep)
+    if (item[1] === keep.prefix) {
       result = `${item[2]} ${result}`
+      if (keep.block)
+        uno.config.blocklist = [...new Set([...uno.config.blocklist, item[2]])]
+    }
 
     code.overwrite(item.index!, item.index! + item[0].length, result as string)
   }
