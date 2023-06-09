@@ -2,7 +2,20 @@ import { expandVariantGroup, isStaticShortcut, isString } from '@unocss/core'
 import type { ShortcutValue, SourceCodeTransformer, UnoGenerator } from '@unocss/core'
 import type MagicString from 'magic-string'
 
-export interface KeepOption { prefix: string; block: boolean }
+export interface KeepOption {
+  /**
+   * keep prefix for your alias.
+   *
+   * @default '+'
+   */
+  prefix: string
+  /**
+   * Decedide whether to put it in `blocklist`.
+   *
+   * @default true
+   */
+  block: boolean
+}
 
 export interface TransformerAliasOptions {
   /**

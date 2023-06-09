@@ -16,7 +16,7 @@ export default defineConfig({
   // ...
   shortcuts: [
     ['btn', 'px-2 py-3 bg-blue-500 text-white rounded'],
-    [/^btn-(.*)$/, ([, c]) => `bg-${c}4:10 text-${c}5 rounded`],
+    [/^btn-(.*)$/, ([, c]) => `btn bg-${c}4:10 text-${c}5 rounded`],
   ],
   transformers: [
     transformerAlias(),
@@ -29,13 +29,15 @@ export default defineConfig({
 ```html
 <div *btn />
 <div class="*btn-red" />
+<div class="+btn-blue" />
 ```
 
 Will be transformed to:
 
 ```html
 <div px-2 py-3 bg-blue-500 text-white rounded>
-<div class="bg-red4:10 text-red5 rounded" />
+<div class="px-2 py-3 bg-blue-500 text-white rounded bg-red4:10 text-red5 rounded" />
+<div class="btn-blue px-2 py-3 bg-blue-500 text-white rounded bg-blue4:10 text-blue5 rounded" />
 ``` 
 
 ## Options
@@ -44,9 +46,34 @@ Will be transformed to:
 
 ```ts
 transformerAlias({
-  // default: '*'
+  /**
+   * Prefix for your alias.
+   *
+   * @default "*"
+   */
   prefix?: string
+  /**
+   * Prefix for your alias and keep the original class.
+   *
+   * @default '+'
+   */
+  keep?: string | KeepOption
 })
+
+interface KeepOption {
+  /**
+   * keep prefix for your alias.
+   *
+   * @default '+'
+   */
+  prefix: string
+  /**
+   * Decedide whether to put it in `blocklist`.
+   *
+   * @default true
+   */
+  block: boolean
+}
 ```
 
 ## About
