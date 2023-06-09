@@ -9,9 +9,15 @@ export interface TransformerAliasOptions {
    * @default "*"
    */
   prefix?: string
+  /**
+   * Prefix for your alias and keep the original class.
+   *
+   * @default '+'
+   */
+  keep?: string
 }
 
-export default function transformerAlias(options: TransformerAliasOptions = {}): SourceCodeTransformer {
+export default function transformerAlias(options?: TransformerAliasOptions): SourceCodeTransformer {
   return {
     name: 'unocss-transformer-alias',
     enforce: 'pre',
@@ -24,10 +30,12 @@ export default function transformerAlias(options: TransformerAliasOptions = {}):
 export async function transformAlias(
   code: MagicString,
   uno: UnoGenerator,
-  options: TransformerAliasOptions = {},
+  {
+    prefix = '*',
+    keep = '+',
+  }: TransformerAliasOptions = {},
 ) {
-  const prefix = options.prefix ?? '*'
-  const extraRE = new RegExp(`${escapeRegExp(prefix)}([\\w-]+)`, 'g')
+  const extraRE = new RegExp(`(${escapeRegExp(prefix)}|${escapeRegExp(keep)})([\\w-]+)`, 'g')
   const map = new Map<string, ShortcutValue | false>()
 
   for (const item of Array.from(code.original.matchAll(extraRE))) {
@@ -36,7 +44,7 @@ export async function transformAlias(
       continue
     }
     else if (!result) {
-      const r = await expandShortcut(item[1], uno)
+      const r = await expandShortcut(item[2], uno)
       if (r) {
         result = r[0].join(' ')
         map.set(item[0], result)
@@ -46,6 +54,9 @@ export async function transformAlias(
         continue
       }
     }
+
+    if (item[1] === keep)
+      result = `${item[2]} ${result}`
 
     code.overwrite(item.index!, item.index! + item[0].length, result as string)
   }

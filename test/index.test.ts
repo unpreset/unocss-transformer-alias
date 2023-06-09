@@ -11,11 +11,12 @@ const uno = createGenerator({
   ],
 })
 
-function createTransformer(prefix = '*') {
+function createTransformer(prefix = '*', keep = '+') {
   return async (code: string, _uno: UnoGenerator = uno) => {
     const s = new MagicString(code)
     await transformAlias(s, _uno, {
       prefix,
+      keep,
     })
     return s.toString()
   }
@@ -98,5 +99,22 @@ describe('transformer alias', () => {
           ],
         ]
       `)
+  })
+
+  test('keep shortcut', async () => {
+    const code = `
+    <template>
+        <div class="+btn" />
+        <div *btn-red />
+    </template>
+        `.trim()
+    const transform = createTransformer('*', '+')
+
+    expect(await transform(code)).toMatchInlineSnapshot(`
+      "<template>
+              <div class=\\"btn text-white text-xl font-bold py-2 px-4 rounded cursor-pointer\\" />
+              <div bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer />
+          </template>"
+    `)
   })
 })
