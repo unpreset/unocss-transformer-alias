@@ -38,7 +38,7 @@ Will be transformed to:
 <div px-2 py-3 bg-blue-500 text-white rounded>
 <div class="px-2 py-3 bg-blue-500 text-white rounded bg-red4:10 text-red5 rounded" />
 <div class="btn-blue px-2 py-3 bg-blue-500 text-white rounded bg-blue4:10 text-blue5 rounded" />
-``` 
+```
 
 ## Options
 
@@ -52,6 +52,7 @@ transformerAlias({
    * @default "*"
    */
   prefix?: string
+
   /**
    * Prefix for your alias and keep the original class.
    *
@@ -80,7 +81,6 @@ interface KeepOption {
 
 - [UnoCSS Issue #2543](https://github.com/unocss/unocss/issues/2543)
 - [WindiCSS Alias Config](https://windicss.org/integrations/vite.html#alias-config)
-
 
 ## License
 

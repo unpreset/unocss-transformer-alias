@@ -1,6 +1,6 @@
 import type { UnoGenerator } from '@unocss/core'
 import { createGenerator } from '@unocss/core'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import MagicString from 'magic-string'
 import { type KeepOption, expandShortcut, transformAlias } from '../src'
 
@@ -23,7 +23,7 @@ function createTransformer(prefix = '*', keep: string | KeepOption = '+') {
 }
 
 describe('transformer alias', () => {
-  test('basic', async () => {
+  it('basic', async () => {
     const transform = createTransformer()
 
     const code = `
@@ -38,14 +38,14 @@ describe('transformer alias', () => {
     expect(await transform(code)).toMatchInlineSnapshot(`
       "<template>
         <div text-white text-xl font-bold py-2 px-4 rounded cursor-pointer>
-          <div text-xl class=\\"bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer\\" />
+          <div text-xl class="bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer" />
           <div bg-teal-500 hover:bg-teal-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer />
         </div>
       </template>"
     `)
   })
 
-  test('prefix', async () => {
+  it('prefix', async () => {
     const transform = createTransformer('&')
 
     const code = `
@@ -60,14 +60,14 @@ describe('transformer alias', () => {
     expect(await transform(code)).toMatchInlineSnapshot(`
       "<template>
         <div &test-none>
-          <div text-xl class=\\"bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer\\" />
+          <div text-xl class="bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer" />
           <div *btn-red />
         </div>
       </template>"
     `)
   })
 
-  test('expand shortcut', async () => {
+  it('expand shortcut', async () => {
     const code = `
     <template>
         <div class="*btn-red" />
@@ -78,7 +78,7 @@ describe('transformer alias', () => {
 
     expect(await transform(code)).toMatchInlineSnapshot(`
       "<template>
-              <div class=\\"bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer\\" />
+              <div class="bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer" />
               <div bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer />
           </template>"
     `)
@@ -101,16 +101,16 @@ describe('transformer alias', () => {
       `)
   })
 
-  test('keep shortcut with prefix', async () => {
+  it('keep shortcut with prefix', async () => {
     const code = '<div class="+btn" />'
     const transform = createTransformer('*', '+')
     const result = await transform(code)
 
-    expect(result).toMatchInlineSnapshot('"<div class=\\"btn text-white text-xl font-bold py-2 px-4 rounded cursor-pointer\\" />"')
+    expect(result).toMatchInlineSnapshot(`"<div class="btn text-white text-xl font-bold py-2 px-4 rounded cursor-pointer" />"`)
     expect(uno.config.blocklist).toContain('btn')
   })
 
-  test('keep shortcut with block false', async () => {
+  it('keep shortcut with block false', async () => {
     const _uno = createGenerator({
       shortcuts: [
         ['btn', 'text-(white xl) font-bold py-2 px-4 rounded cursor-pointer'],
@@ -120,7 +120,7 @@ describe('transformer alias', () => {
     const transform = createTransformer('*', { prefix: '+', block: false })
     const result = await transform(code)
 
-    expect(result).toMatchInlineSnapshot('"<div class=\\"btn text-white text-xl font-bold py-2 px-4 rounded cursor-pointer\\" />"')
+    expect(result).toMatchInlineSnapshot(`"<div class="btn text-white text-xl font-bold py-2 px-4 rounded cursor-pointer" />"`)
     expect(_uno.config.blocklist).toEqual([])
   })
 })

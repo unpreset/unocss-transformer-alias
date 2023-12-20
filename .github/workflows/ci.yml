@@ -14,40 +14,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: Set node
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 20.x
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.1
-        with:
-          version: 7.27.0
+      - name: Setup
+        run: npm i -g @antfu/ni
 
       - name: Install
-        run: pnpm install
+        run: nci
 
       - name: Lint
-        run: pnpm lint
+        run: nr lint
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        node: [20.x, 18.x]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+
     steps:
       - uses: actions/checkout@v3
-
-      - name: Set node
+      - name: Set node ${{ matrix.node }}
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: ${{ matrix.node }}
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.1
-        with:
-          version: 7.27.0
+      - name: Setup
+        run: npm i -g @antfu/ni
 
       - name: Install
-        run: pnpm install
+        run: nci
+
+      - name: Build
+        run: nr build
 
       - name: Test
-        run: pnpm test
+        run: nr test
