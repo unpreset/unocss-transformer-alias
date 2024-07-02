@@ -8,6 +8,7 @@ const uno = createGenerator({
   shortcuts: [
     ['btn', 'text-(white xl) font-bold py-2 px-4 rounded cursor-pointer'],
     [/^btn-(.+)$/, ([,d]) => `bg-${d}-500 hover:bg-${d}-700 btn`],
+    [/^tapped:(.*)$/, ([, c]) => `hover:${c} active:${c}`],
   ],
 })
 
@@ -31,6 +32,7 @@ describe('transformer alias', () => {
   <div *btn>
     <div text-xl class="*btn-red" />
     <div *btn-teal />
+    <div text-red *tapped:text-blue />
   </div>
 </template>
     `.trim()
@@ -40,6 +42,7 @@ describe('transformer alias', () => {
         <div text-white text-xl font-bold py-2 px-4 rounded cursor-pointer>
           <div text-xl class="bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer" />
           <div bg-teal-500 hover:bg-teal-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer />
+          <div text-red hover:text-blue active:text-blue />
         </div>
       </template>"
     `)
@@ -53,6 +56,8 @@ describe('transformer alias', () => {
   <div &test-none>
     <div text-xl class="&btn-red" />
     <div *btn-red />
+    <div *tapped:text-blue />
+    <div &tapped:text-blue />
   </div>
 </template>
     `.trim()
@@ -62,6 +67,8 @@ describe('transformer alias', () => {
         <div &test-none>
           <div text-xl class="bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer" />
           <div *btn-red />
+          <div *tapped:text-blue />
+          <div hover:text-blue active:text-blue />
         </div>
       </template>"
     `)
@@ -72,6 +79,8 @@ describe('transformer alias', () => {
     <template>
         <div class="*btn-red" />
         <div *btn-red />
+        <div class="*tapped:text-blue" />
+        <div *tapped:text-blue />
     </template>
         `.trim()
     const transform = createTransformer()
@@ -80,6 +89,8 @@ describe('transformer alias', () => {
       "<template>
               <div class="bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer" />
               <div bg-red-500 hover:bg-red-700 text-white text-xl font-bold py-2 px-4 rounded cursor-pointer />
+              <div class="hover:text-blue active:text-blue" />
+              <div hover:text-blue active:text-blue />
           </template>"
     `)
 
@@ -96,6 +107,16 @@ describe('transformer alias', () => {
             "px-4",
             "rounded",
             "cursor-pointer",
+          ],
+        ]
+      `)
+
+    expect(await expandShortcut('tapped:text-blue', uno))
+      .toMatchInlineSnapshot(`
+        [
+          [
+            "hover:text-blue",
+            "active:text-blue",
           ],
         ]
       `)
