@@ -2,6 +2,7 @@
   "name": "unocss-transformer-alias",
   "type": "module",
   "version": "0.0.7",
+  "packageManager": "pnpm@9.4.0",
   "description": "Transform alias for UnoCSS shortcuts",
   "author": "Chris <https://github.com/zyyv>",
   "license": "MIT",
