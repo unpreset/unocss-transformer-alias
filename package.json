@@ -47,6 +47,7 @@
     "prepublishOnly": "pnpm run build",
     "release": "bumpp --commit --push --tag && pnpm publish",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "test": "vitest",
     "test:update": "vitest -u",
     "typecheck": "tcs --noEmit",
