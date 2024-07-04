@@ -1,6 +1,25 @@
-# unocss-transformer-alias [![npm](https://img.shields.io/npm/v/unocss-transformer-alias.svg)](https://npmjs.com/package/unocss-transformer-alias)
+<p align="center">
+<img src="https://raw.githubusercontent.com/unpreset/unocss-transformer-alias/main/public/logo.svg" style="width:100px;" />
+</p>
 
-Transform alias for UnoCSS shortcuts.
+<h1 align="center">unocss-transformer-alias</h1>
+
+<p align="center">🌈 Transform alias for UnoCSS shortcuts.</p>
+
+<p align="center">
+<a>
+<img src="https://img.shields.io/npm/v/unocss-transformer-alias?style=flat&colorA=080f12&colorB=1fa669" alt="npm version" />
+</a>
+<a>
+<img src="https://img.shields.io/npm/dm/unocss-transformer-alias?style=flat&colorA=080f12&colorB=1fa669" alt="npm downloads" />
+</a>
+<a>
+<img src="https://img.shields.io/bundlephobia/minzip/unocss-transformer-alias?style=flat&colorA=080f12&colorB=1fa669&label=minzip" alt="bundle" />
+</a>
+<a>
+<img src="https://img.shields.io/github/license/unpreset/unocss-transformer-alias.svg?style=flat&colorA=080f12&colorB=1fa669" alt="License" />
+</a>
+</p>
 
 ## Install
 ```shell
