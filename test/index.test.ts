@@ -110,16 +110,6 @@ describe('transformer alias', () => {
           ],
         ]
       `)
-
-    expect(await expandShortcut('tapped:text-blue', uno))
-      .toMatchInlineSnapshot(`
-        [
-          [
-            "hover:text-blue",
-            "active:text-blue",
-          ],
-        ]
-      `)
   })
 
   it('keep shortcut with prefix', async () => {

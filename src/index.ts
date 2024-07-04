@@ -53,7 +53,7 @@ export async function transformAlias(
   if (typeof keep === 'string')
     keep = { prefix: keep, block: true }
 
-  const extraRE = new RegExp(`(${escapeRegExp(prefix)}|${escapeRegExp(keep.prefix)})([\:\\w-]+)`, 'g')
+  const extraRE = new RegExp(`(${escapeRegExp(prefix)}|${escapeRegExp(keep.prefix)})([\\w-:]+)`, 'g')
   const map = new Map<string, ShortcutValue | false>()
 
   for (const item of Array.from(code.original.matchAll(extraRE))) {
