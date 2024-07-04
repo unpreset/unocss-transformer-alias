@@ -14,9 +14,6 @@
 <img src="https://img.shields.io/npm/dm/unocss-transformer-alias?style=flat&colorA=080f12&colorB=1fa669" alt="npm downloads" />
 </a>
 <a>
-<img src="https://img.shields.io/bundlephobia/minzip/unocss-transformer-alias?style=flat&colorA=080f12&colorB=1fa669&label=minzip" alt="bundle" />
-</a>
-<a>
 <img src="https://img.shields.io/github/license/unpreset/unocss-transformer-alias.svg?style=flat&colorA=080f12&colorB=1fa669" alt="License" />
 </a>
 </p>
